@@ -1,0 +1,12 @@
+[
+  {
+    "model": "user.User",
+    "pk": 1,
+    "fields": {
+      "username": "user 01",
+      "email": "user 01",
+      "first_name": "user 01",
+      "last_name": "user 01"
+    }
+  }
+]

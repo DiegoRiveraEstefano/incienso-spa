@@ -1,0 +1,88 @@
+from django.contrib.auth import authenticate, login
+from django.shortcuts import redirect
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
+from .models import User
+from .serializers import UserSerializer, UserWriteSerializer, UserLoginSerializer
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = []
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return UserSerializer
+        return UserWriteSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        user.set_password(self.request.data.get('password'))
+        user.save()
+
+    def perform_update(self, serializer):
+        user = serializer.save()
+        if 'password' in self.request.data:
+            user.set_password(self.request.data.get('password'))
+            user.save()
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
+
+    def create(self, request, *args, **kwargs):
+        serialized_user = UserWriteSerializer(data=request.data)
+
+        if not serialized_user.is_valid(raise_exception=False):
+            return redirect('user-register-form')
+
+        user = User.objects.create_user(
+            is_admin=False,
+            **serialized_user.data
+        )
+        user.save()
+
+        return redirect('user-login-form')
+
+    @action(methods=['POST'], detail=False)
+    def login(self, request):
+        serialized_user = UserLoginSerializer(data=request.data)
+        if not serialized_user.is_valid(raise_exception=False):
+            return redirect('user-login-form')
+
+        user = authenticate(username=serialized_user.data['username'], password=serialized_user.data['password'])
+        if user:
+            login(request, user)
+            return redirect('user-profile')
+
+    @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated, ])
+    def profile(self, request):
+        return Response(
+            {'user': request.user}, status=status.HTTP_200_OK,
+            template_name='views/user/user_profile.html'
+        )
+
+    @action(methods=['GET'], detail=False, permission_classes=[AllowAny, ], url_name='login-form')
+    def login_form(self, request):
+        serializer = UserLoginSerializer()
+        return Response(
+            {'serializer': serializer},
+            status=status.HTTP_200_OK,
+            template_name='views/user/user_login.html'
+        )
+
+    @action(methods=['GET'], detail=False, permission_classes=[AllowAny, ], url_name='register-form')
+    def register_form(self, request):
+        serializer = UserWriteSerializer()
+        return Response(
+            {'serializer': serializer},
+            status=status.HTTP_200_OK,
+            template_name='views/user/user_register.html'
+        )
