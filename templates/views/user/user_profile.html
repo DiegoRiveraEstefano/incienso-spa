@@ -6,7 +6,11 @@
     <ul class="collection with-header">
         {% for order in user.get_orders %}
             <li class="collection-item">
-                {{order.product}} - {{order.quantity}} units @ ${{order.price}} each
+                <a
+                hx-get="{% url 'order-detail' order.uuid %}"
+                hx-swap="innerHTML"
+                hx-target="#app">{{order.uuid}} - {{order.address}} @ ${{order.total_cost}}
+                </a>
             </li>
         {% endfor %}
     </ul>

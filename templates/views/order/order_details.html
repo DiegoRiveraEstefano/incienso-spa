@@ -1,3 +1,58 @@
-<div>
-    {{ order }}
+<h4>Orden:</h4>
+<div class="order-details">
+    <table class="highlight striped centered responsive-table">
+        <thead>
+          <tr>
+            <th>Direccion</th>
+            <th>Ciudad</th>
+            <th>Codigo de Descuento</th>
+            <th>Aplicado</th>
+            <th>Pagado</th>
+            <th>Precio Final</th>
+            <th>Fecha</th>
+            <th>Paypal id</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ order.address }}</td>
+                <td>{{ order.city }}</td>
+                <td>{{ order.discount_code }}</td>
+                {% if order.discount_is_valid %}
+                    <td style="color: green">Si</td>
+                {% else %}
+                    <td style="color: red">No</td>
+                {% endif %}
+                <td>{{ order.paid }}</td>
+                <td>${{ order.total_cost }}</td>
+                <td>{{ order.created }}</td>
+                <td>{{ order.payment_id }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="product-list">
+    <h4>Productos:</h4>
+    <table class="highlight striped centered responsive-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Precio Sin Descuento</th>
+            <th>Cantidad</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in order.get_items %}
+            <tr>
+              <td><a href="#">{{ i.product.name }}</a></td>
+              <td>${{ i.product.final_price }}</td>
+              <td>${{ i.product.price }}</td>
+              <td>{{ i.quantity }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
 </div>

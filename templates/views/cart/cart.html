@@ -1,12 +1,13 @@
 <div class="container">
-  <h1>User Cart</h1>
+  <h1>Carrito</h1>
   <div class="row">
     <section class="col s8">
       <table class="highlight striped centered responsive-table">
         <thead>
           <tr>
-            <th>Nombre Product</th>
+            <th>Producto</th>
             <th>Precio</th>
+            <th>Precio Sin Descuento</th>
             <th>Cantidad</th>
             <th></th>
           </tr>
@@ -16,6 +17,7 @@
             <tr>
               <td><a href="#">{{ i.product.name }}</a></td>
               <td>${{ i.get_cost }}</td>
+              <td>${{ i.get_raw_cost }}</td>
               <td>{{ i.quantity }}</td>
               <td><button class="waves-effect waves-light btn">Remover</button></td>
             </tr>
@@ -23,17 +25,19 @@
         </tbody>
       </table>
     </section>
+    <br>
     <aside class="col s4">
-      <p>
-        Total: {{ cart.get_total_cost }}
-        Ir A Comprar:
-        <button
-            class="btn waves-effect indigo lighten-2"
-            hx-get="{% url 'order-create-form' %}"
-            hx-swap="innerHTML"
-            hx-target="#app">Ir Registrarte
-        </button>
-      </p>
+      <hgroup>
+        <p>Total: {{ cart.get_cost }}</p>
+        <h6>Descuentos: {{ cart.discounts }}</h6>
+      </hgroup>
+      <br>
+      <button
+          class="btn waves-effect indigo lighten-2"
+          hx-get="{% url 'order-create-form' %}"
+          hx-swap="innerHTML"
+          hx-target="#app">Ir a Pagar
+      </button>
     </aside>
   </div>
 

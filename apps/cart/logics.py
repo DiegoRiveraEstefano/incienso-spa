@@ -8,7 +8,7 @@ def get_cart(user_id):
 
 def add_product(user_id, product_id):
     cart = get_cart(user_id)
-    product = get_object_or_404(Product, id=product_id)
+    product = get_object_or_404(Product, pk=product_id)
     if not product or not cart:
         return None
 

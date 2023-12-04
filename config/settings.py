@@ -66,6 +66,11 @@ MIDDLEWARE = [
 DEBUG = True  # env.bool('DEBUG')
 SECRET_KEY = "algunka key"#env.str('SECRET_KEY')
 
+CLIENT_ID = ""#env.str('PAYPAL_CLIENT_ID')
+CLIENT_SECRET = ""#env.str('PAYPAL_CLIENT_SECRET')
+
+REDIRECT_PAGE = 'http://localhost:4321/order/%order%'
+
 # DOMAINS
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DOMAIN = env.str('DOMAIN', default='localhost')

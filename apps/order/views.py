@@ -10,7 +10,7 @@ from apps.cart.models import Cart
 from apps.user.models import User
 from .models import Order, OrderItem
 from .logics import create_order
-from .serializers import OrderSerializer, OrderItemSerializer
+from .serializers import OrderSerializer, OrderItemSerializer, OrderWriteSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -41,20 +41,23 @@ class OrderViewSet(viewsets.ModelViewSet):
         data = {
             'address': request.data['address'],
             'postal_code': request.data['postal_code'],
-            'city': request.data['city']
+            'city': request.data['city'],
+            'discount_code': request.data['discount_code']
         }
         cart = get_object_or_404(Cart, user=request.user.id)
 
         if cart.is_empty():
-            return redirect('product-list')
+            return redirect('cart-list')
 
         cart_products = cart.products.all()
         data['user'] = get_object_or_404(User, id=request.user.id).id
 
         serialized_order = self.serializer_class(data=data)
-        serialized_order.is_valid(raise_exception=True)
+        if not serialized_order.is_valid(raise_exception=False):
+            return redirect('cart-list')
 
         order = serialized_order.save()
+        order.save()
         for i in cart_products:
             order_item = OrderItem(
                 order=order,
@@ -62,14 +65,16 @@ class OrderViewSet(viewsets.ModelViewSet):
                 quantity=i.quantity
             )
             order_item.save()
+        order.total_cost = order.get_total_cost()
+        order.save()
         cart.set_empty()
-        return redirect('order-details', pk=order.uuid)
+        return redirect('order-detail', pk=order.uuid)
 
     @action(methods=['GET'], detail=False, url_name='create-form')
-    def get_order_create_form(self):
-        serializer = OrderSerializer()
+    def get_order_create_form(self, request: Request):
+        serializer = OrderWriteSerializer()
         return Response(
             {'serializer': serializer},
             status=status.HTTP_200_OK,
-            template_name='views/user/user_register.html'
+            template_name='views/order/order_create.html'
         )

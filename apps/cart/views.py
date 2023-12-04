@@ -15,7 +15,7 @@ from .logics import add_product, remove_product, get_cart
 
 
 class CartViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, CreateModelMixin):
-    permission_classes = [AllowAny, IsAuthenticated]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = CartSerializer
     renderer_classes = [TemplateHTMLRenderer]
     parser_classes = [FormParser, ]
@@ -28,13 +28,12 @@ class CartViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
     def list(self, request, *args, **kwargs):
         cart: Cart = get_cart(request.user.id)
         return Response(data={'cart': cart},
-                        template_name='views/product/product_detailed.html', status=status.HTTP_200_OK)
+                        template_name='views/cart/cart.html', status=status.HTTP_200_OK)
 
-    #def retrieve(self, request, *args, **kwargs):
-    #    return redirect('cart-list')
+    def retrieve(self, request, *args, **kwargs):
+        return redirect('cart-list')
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         data = request.data
         product_cart = add_product(request.user.id, data['product_uuid'])
         return Response(
@@ -53,7 +52,7 @@ class CartViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['POST'], detail=False, url_name='remove-product')
+    @action(methods=['POST'], detail=True, url_name='remove-product')
     def remove_product(self, request: Request, *args, **kwargs):
         data = request.data
         remove_product(request.user.id, data['product_id'])

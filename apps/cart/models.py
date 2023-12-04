@@ -19,13 +19,16 @@ class Cart(models.Model):
         verbose_name_plural = 'Carts'
 
     def __str__(self):
-        return f"Cart(id={self.id}, user={self.user})"
+        return f"Cart(id={self.uuid}, user={self.user})"
 
     def get_products(self):
         return self.products.all()
 
-    def get_total_cost(self):
+    def get_cost(self):
         return sum(item.get_cost() for item in self.products.all())
+
+    def get_raw_cost(self):
+        return sum(item.get_raw_cost() for item in self.products.all())
 
     def is_empty(self):
         return True if len(self.products.all()) == 0 else False
@@ -33,6 +36,10 @@ class Cart(models.Model):
     def set_empty(self):
         for i in self.products.all():
             i.delete()
+
+    @property
+    def discounts(self):
+        return self.get_raw_cost() - self.get_cost()
 
 
 class ProductCart(models.Model):
@@ -47,9 +54,12 @@ class ProductCart(models.Model):
         verbose_name_plural = 'ProductCarts'
 
     def __str__(self):
-        return f"ProductCart(id={self.id}, cart={self.cart}, product={self.product}, quantity={self.quantity})"
+        return f"ProductCart(id={self.uuid}, cart={self.cart}, product={self.product}, quantity={self.quantity})"
 
     def get_cost(self):
+        return self.product.get_final_price() * self.quantity
+
+    def get_raw_cost(self):
         return self.product.price * self.quantity
 
 
