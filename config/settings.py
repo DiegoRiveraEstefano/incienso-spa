@@ -64,7 +64,7 @@ MIDDLEWARE = [
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = True  # env.bool('DEBUG')
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = "algunka key"#env.str('SECRET_KEY')
 
 # DOMAINS
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
@@ -213,7 +213,6 @@ AUTH_USER_MODEL = 'user.User'
 # DJANGO REST FRAMEWORK
 # ------------------------------------------------------------------------------
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'apps.user.exceptions.custom_exception_handler',
     'UPLOADED_FILES_USE_URL': False,
     'DEFAULT_PERMISSION_CLASSES': [],
     'DEFAULT_PARSER_CLASSES': [
@@ -224,6 +223,3 @@ REST_FRAMEWORK = {
     ],
 }
 
-#handler403 = permission_denied_view
-
-#defaults.permission_denied = permission_denied_view

@@ -31,11 +31,19 @@
     hx-swap="innerHTML"
     hx-target="#app"
     hx-trigger="r-fail">
+
 <script>
 
+htmx.on('htmx:configRequest', function(evt) {
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
+  console.log(evt.detail.headers)
+  evt.detail.headers['X-CSRFToken'] = csrftoken.value
+  console.log(evt.detail.headers);
+});
+</script>
+
+<script>
 htmx.on("htmx:responseError", function(evt) {
   htmx.trigger("#user-login", "r-fail");
 });
-
-
 </script>
