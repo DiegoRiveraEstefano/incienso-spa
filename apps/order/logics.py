@@ -48,17 +48,16 @@ def get_paypal_token() -> str:
     return token.json()['access_token']
 
 
-def make_pay_order(order: Order, notify_url, return_url, cancel_url):
+def make_pay_order(order: Order, return_url, cancel_url):
     token = get_paypal_token()
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
     }
     application_context = {
-        "notify_url": notify_url,
         "return_url": return_url,
         "cancel_url": cancel_url,
-        "brand_name": "Estacionamiento Inacap",
+        "brand_name": "Incienso Inacap",
         "landing_page": "BILLING",
         "shipping_preference": "NO_SHIPPING",
         "user_action": "CONTINUE"
@@ -66,7 +65,7 @@ def make_pay_order(order: Order, notify_url, return_url, cancel_url):
 
     purchase_units = [
         {
-            "reference_id": order.uuid,
+            "reference_id": str(order.uuid),
             "description": "Incienso",
 
             "custom_id": "CUST-Incienso",
@@ -109,5 +108,7 @@ def get_payment_status(order: Order):
         return True, {'context': 'Cantidad Incorrecta'}
 
     order.paid = True
+    cart = Cart.objects.get(user=order.user)
+    cart.set_empty()
     order.save()
     return True, {'context': 'Pago Correctamente Realizado'}

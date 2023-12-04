@@ -1,19 +1,40 @@
 {% load rest_framework %}
 
+<script>
+function getLink(){
+    var myHeaders = new Headers();
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
+    myHeaders.append("X-CSRFToken", csrftoken.value)
+    myHeaders.append("Accept", "application/json");
+
+    var form = document.querySelector("#order-create-form")
+    var data = new FormData(form)
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: data,
+      redirect: 'follow'
+    };
+
+    var link = fetch("http://127.0.0.1:8000/order/", requestOptions)
+      .then(response => response.json())
+      .then(result => window.location.href=result['link'])
+      .catch(error => console.log('error', error));
+}
+</script>
+
 <h1 class="center-align">Realizar Pago</h1>
 <div class="container">
   <div class="container">
-    <form method="POST" action="{% url 'order-list' %}" id="user-login-form" hx-post="{% url 'order-list' %}"
-        hx-swap="innerHTML"
-        hx-target="#app">
+    <form onsubmit="event.preventDefault();" id="order-create-form">
         {% csrf_token %}
         {% render_form serializer %}
-        <button
-            type="submit"
-            form="user-login-form"
-            class="btn waves-effect indigo lighten-2"
-            >Pagar
-        </button>
     </form>
+    <button
+        hx-on:click="getLink()"
+        class="btn waves-effect indigo lighten-2"
+        >Pagar
+    </button>
   </div>
 </div>

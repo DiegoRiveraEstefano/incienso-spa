@@ -25,7 +25,6 @@ class ProductViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin
         return Product.objects.filter(stock__gte=1, active=True)
 
     def list(self, request, *args, **kwargs):
-        print(request.user)
         queryset = self.filter_queryset(self.get_queryset())
         return Response({'products': queryset},
                         template_name='views/product/product_list.html', status=status.HTTP_200_OK)

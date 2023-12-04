@@ -36,9 +36,7 @@
 
 htmx.on('htmx:configRequest', function(evt) {
   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
-  console.log(evt.detail.headers)
   evt.detail.headers['X-CSRFToken'] = csrftoken.value
-  console.log(evt.detail.headers);
 });
 </script>
 

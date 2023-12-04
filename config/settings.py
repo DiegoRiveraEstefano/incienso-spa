@@ -8,15 +8,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/dev/ref/settings/
 """
 import environ
-from django.views import defaults
 from dotenv import load_dotenv
 from pathlib import Path
-from apps.user.exceptions import permission_denied_view
-from datetime import timedelta
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = environ.Path(__file__) - 2
 load_dotenv()
+
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
 
@@ -63,11 +62,11 @@ MIDDLEWARE = [
 # DEBUG
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True  # env.bool('DEBUG')
-SECRET_KEY = "algunka key"#env.str('SECRET_KEY')
+DEBUG = os.getenv('DEBUG')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-CLIENT_ID = ""#env.str('PAYPAL_CLIENT_ID')
-CLIENT_SECRET = ""#env.str('PAYPAL_CLIENT_SECRET')
+CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
+CLIENT_SECRET = os.getenv('PAYPAL_CLIENT_SECRET')
 
 REDIRECT_PAGE = 'http://localhost:4321/order/%order%'
 

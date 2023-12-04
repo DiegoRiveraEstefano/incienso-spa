@@ -58,3 +58,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ['product', 'quantity']
+
+
+class OrderPaymentSerializer(serializers.Serializer):
+    link = serializers.URLField(max_length=2048)
