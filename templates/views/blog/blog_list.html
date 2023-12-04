@@ -1,0 +1,13 @@
+
+<div class="container">
+    <h1>Blogs List</h1>
+    <div class="row">
+        <ul id="blogs" class="collection with-header">
+            {% for i in blogs %}
+            <li>
+                {% include "components/blog/blog_min.html" with blog=i%}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

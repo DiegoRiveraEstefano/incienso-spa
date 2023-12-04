@@ -1,0 +1,24 @@
+<header>
+  <nav class="indigo darken-3">
+    <div class="container">
+      <a href="#!" class="brand-logo"><i class="material-icons left">shopping_cart</i>Incense Shop</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li>
+            <a hx-get="{% url 'product-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Productos</a>
+        </li>
+        <li>
+            <a hx-get="{% url 'blog-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Blogs</a>
+        </li>
+        <li>
+            <a hx-get="/about/" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Nosotros</a>
+        </li>
+        <li>
+            <a hx-get="{% url 'user-profile' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Perfil</a>
+        </li>
+        <li>
+            <a hx-get="{% url 'cart-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app"><i class="material-icons">shopping_cart</i></a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

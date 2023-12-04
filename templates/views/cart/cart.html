@@ -1,0 +1,40 @@
+<div class="container">
+  <h1>User Cart</h1>
+  <div class="row">
+    <section class="col s8">
+      <table class="highlight striped centered responsive-table">
+        <thead>
+          <tr>
+            <th>Nombre Product</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in cart.get_products %}
+            <tr>
+              <td><a href="#">{{ i.product.name }}</a></td>
+              <td>${{ i.get_cost }}</td>
+              <td>{{ i.quantity }}</td>
+              <td><button class="waves-effect waves-light btn">Remover</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    <aside class="col s4">
+      <p>
+        Total: {{ cart.get_total_cost }}
+        Ir A Comprar:
+        <button
+            class="btn waves-effect indigo lighten-2"
+            hx-get="{% url 'order-create-form' %}"
+            hx-swap="innerHTML"
+            hx-target="#app">Ir Registrarte
+        </button>
+      </p>
+    </aside>
+  </div>
+
+</div>

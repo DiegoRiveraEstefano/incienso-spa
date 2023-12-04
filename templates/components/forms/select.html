@@ -1,0 +1,17 @@
+{% load rest_framework %}
+
+<div>
+    {% if field.label %}
+        <label>
+            {{ field.label }}
+        </label>
+    {% endif %}
+    <select class="browser-default" name="{{ field.name }}">
+        {% if field.allow_null or field.allow_blank %}
+          <option value="" {% if not field.value %}selected{% endif %}>--------</option>
+        {% endif %}
+        {% for select in field.iter_options %}
+          <option value="{{ select.value }}" {% if select.value|as_string == field.value|as_string %}selected{% endif %}>{{ select.display_text }}</option>
+        {% endfor %}
+    </select>
+</div>

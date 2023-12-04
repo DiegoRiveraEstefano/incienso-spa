@@ -1,0 +1,28 @@
+<div class="container">
+    <h1>User Profile</h1>
+    <p>Welcome, {{user.username}}!</p>
+    <hr>
+    <h2>Orders:</h2>
+    <ul class="collection with-header">
+        {% for order in user.get_orders %}
+            <li class="collection-item">
+                {{order.product}} - {{order.quantity}} units @ ${{order.price}} each
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <h2>Blogs:</h2>
+    <ul class="collection">
+        {% for blog in user.get_blogs %}
+        <li class="collection-item">
+            <p><a class="btn-floating btn-large waves-effect" hx-get="{% url 'blog-detail' blog.uuid %}" hx-swap="innerHTML" hx-target="#app">{{blog.title}}</a></p>
+        </li>
+        {% endfor %}
+    </ul>
+    <button
+        class="btn waves-effect indigo lighten-2"
+        hx-get="{% url 'blog-create-form' %}"
+        hx-swap="innerHTML"
+        hx-target="#app">Crear Blog
+    </button>
+</div>

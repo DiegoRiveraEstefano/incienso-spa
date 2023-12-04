@@ -1,0 +1,26 @@
+<div class="col m3">
+  <div class="card">
+    <div class="card-image">
+      <img class="responsive-img" src="{{ product.thumbnail.url }}">
+      <br>
+      <br>
+      <span class="card-title black-text">{{ product.name }}</span>
+    </div>
+    <div class="card-content">
+      <p>
+        precio: {{ product.price }}
+        <br>
+        stock: {{ product.stock }}
+        <br>
+        tipo: {{ product.category }}
+      </p>
+    </div>
+    <div class="card-action">
+      <a hx-get="{% url 'product-detail' product.uuid %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app"><i class="material-icons">info_outlined</i></a>
+      <input id="product-uuid" type="hidden" name="product_uuid" value="{{ product.uuid }}">
+      <a hx-post="{% url 'cart-add-product' %}" hx-include="#product-uuid" hx-swap="innerHTML ignoreTitle:true" hx-target="#app"><i class="material-icons">add_shopping_cart</i></a>
+    </div>
+  </div>
+</div>
+
+           

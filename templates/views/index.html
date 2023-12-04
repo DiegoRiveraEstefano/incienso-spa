@@ -1,0 +1,58 @@
+{% extends "layout/_base.html" %}
+
+{% block content %}
+
+  <section class="hero-container" style="background-image: url(https://www.incense.com/images/incense.jpg)">
+    <div class="container">
+      <h1>Welcome to Incense Shop</h1>
+      <p>Your one-stop shop for all your incense needs.</p>
+
+      <a hx-get="{% url 'product-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app" class="btn waves-effect indigo lighten-2">Explore Now
+        <i class="material-icons right">chevron_right</i>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://www.incense.com/images/incense.jpg" alt="Incense">
+          </div>
+          <div class="card-content">
+            <h5>Sweet Incense</h5>
+            <p>Aromatherapy, meditation, and relaxation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://www.incense.com/images/incense.jpg" alt="Incense">
+          </div>
+          <div class="card-content">
+            <h5>Meditation Incense</h5>
+            <p>Calming and soothing for meditation and relaxation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col s12 m6 l4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://www.incense.com/images/incense.jpg" alt="Incense">
+          </div>
+          <div class="card-content">
+            <h5>Relaxation Incense</h5>
+            <p>Aromatherapy for stress and anxiety.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

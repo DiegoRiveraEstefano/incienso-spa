@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>{{ product.name }}</h1>
+    <!-- Use Materialize CSS's grid system to create a responsive design -->
+    <div class="row">
+        <div class="col s12 m6 l4">
+            <img src="{{ product.thumbnail.url }}" alt="Product Image" width="100%" />
+        </div>
+        <div class="col s12 m6 l4">
+            <br>
+            <div class="card horizontal">
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <p>Precio: ${{ product.price }}</p>
+                        <p>Stock: {{ product.stock }}</p>
+                        <br>
+                        <a hx-get="/render/cart/" hx-swap="innerHTML ignoreTitle:true" hx-target="#app"><i class="material-icons">add_shopping_cart</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

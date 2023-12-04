@@ -1,0 +1,13 @@
+
+<div class="container">
+    <h1>Product List</h1>
+    <div class="row">
+        <ul id="products" class="collection with-header">
+            {% for i in products %}
+            <li>
+                {% include "components/product/product_min.html" with product=i%}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

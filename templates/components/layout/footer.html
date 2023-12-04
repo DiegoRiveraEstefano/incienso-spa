@@ -1,0 +1,41 @@
+<!-- Footer -->
+
+<br>
+<footer class="page-footer indigo darken-4">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="white-text">Incense Shop</h5>
+        <p class="grey-text text-lighten-4">Your one-stop shop for all your incense needs.</p>
+      </div>
+      <div class="col l4 offset-l2 s12">
+        <h5 class="white-text">Links</h5>
+        <ul>
+          <li><a class="grey-text text-lighten-3" href="#!">Home</a></li>
+          <li><a class="grey-text text-lighten-3" href="#!">Categories</a></li>
+          <li><a class="grey-text text-lighten-3" href="#!">About Us</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container">
+      © 2020 Copyright Incense Shop
+      <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+    </div>
+  </div>
+</footer>
+
+<input id="user-login" type="hidden" name=""
+    hx-get="{% url 'user-login-form' %}"
+    hx-swap="innerHTML"
+    hx-target="#app"
+    hx-trigger="r-fail">
+<script>
+
+htmx.on("htmx:responseError", function(evt) {
+  htmx.trigger("#user-login", "r-fail");
+});
+
+
+</script>

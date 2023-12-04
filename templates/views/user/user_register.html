@@ -1,0 +1,26 @@
+{% load rest_framework %}
+
+<h1 class="center-align">Registro de Usuario</h1>
+<div class="container">
+  <div class="container">
+    <form method="POST" action="{% url 'user-register' %}" id="user-register-form" hx-post="{% url 'user-register' %}"
+        hx-swap="innerHTML"
+        hx-target="#app">
+        {% csrf_token %}
+        {% render_form serializer %}
+        <button
+            type="submit"
+            form="user-register-form"
+            class="btn waves-effect indigo lighten-2"
+            >Registrarse
+        </button>
+        <button
+            form="user-register-form"
+            class="btn waves-effect indigo lighten-2"
+            hx-get="{% url 'user-login-form' %}"
+            hx-swap="innerHTML"
+            hx-target="#app">Ir al Login
+        </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+{% load rest_framework %}
+
+<h1 class="center-align">Blog Creation</h1>
+<div class="container">
+  <div class="container">
+    <form method="POST" action="{% url 'blog-list' %}" id="blog-creation-form" hx-post="{% url 'blog-list' %}"
+        hx-swap="innerHTML"
+        hx-target="#app"
+        hx-encoding="multipart/form-data">
+        {% csrf_token %}
+        {% render_form serializer %}
+        <br><br><br>
+        <button
+            type="submit"
+            form="blog-creation-form"
+            class="btn waves-effect indigo lighten-2"
+            >Subir
+        </button>
+    </form>
+  </div>
+</div>
