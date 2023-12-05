@@ -33,15 +33,38 @@
     hx-trigger="r-fail">
 
 <script>
+//htmx.on('htmx:configRequest', function(evt) {
+//  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
+//  evt.detail.headers['X-CSRFToken'] = csrftoken.value
+//});
 
-htmx.on('htmx:configRequest', function(evt) {
-  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
-  evt.detail.headers['X-CSRFToken'] = csrftoken.value
-});
-</script>
-
-<script>
 htmx.on("htmx:responseError", function(evt) {
   htmx.trigger("#user-login", "r-fail");
+});
+
+htmx.on("htmx:beforeSwap", function(evt) {
+    var elem = document.querySelector('#cart-modal');
+    if (elem == null){
+      return
+    }
+    var instance = M.Modal.getInstance(elem);
+    if (instance.isOpen){
+        instance.close();
+    }
+});
+
+function closeModal(){
+    var elem = document.querySelector('#cart-modal');
+    var instance = M.Modal.getInstance(elem);
+    instance.close();
+}
+
+htmx.on("htmx:afterRequest", function(evt) {
+  var elem = document.querySelector('#cart-modal');
+  if (elem == null){
+      return
+  }
+  var instance = M.Modal.getInstance(elem);
+  instance.open()
 });
 </script>

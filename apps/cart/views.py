@@ -33,36 +33,35 @@ class CartViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
     def retrieve(self, request, *args, **kwargs):
         return redirect('cart-list')
 
-    def create(self, request, *args, **kwargs):
-        data = request.data
-        product_cart = add_product(request.user.id, data['product_uuid'])
+    def create(self, request: Request, *args, **kwargs):
+        data: dict = request.data
+        quantity = int(data['quantity']) if 'quantity' in data.keys() else 1
+        product_cart = add_product(request.user.id, data['product_uuid'], quantity)
         return Response(
             data={'product': product_cart},
             template_name='components/cart/cart_add_product.html',
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['GET'], detail=True, url_name='add-product')
-    def add_product(self, request: Request):
-        data = request.data
-        product_cart = add_product(request.user.id, data['product_uuid'])
+    @action(methods=['GET'], detail=True, url_name='add-product-form')
+    def add_product_form(self, request: Request):
+        serializer = ProductCartSerializer()
         return Response(
-            data={'product': product_cart},
-            template_name='components/cart/cart_add_product.html',
+            data={'serializer': serializer},
+            template_name='components/cart/cart_add_product_form.html',
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['POST'], detail=True, url_name='remove-product')
+    @action(methods=['GET'], detail=True, url_name='remove-product')
     def remove_product(self, request: Request, *args, **kwargs):
-        data = request.data
-        remove_product(request.user.id, data['product_id'])
+        remove_product(request.user.id, kwargs['pk'])
         return Response(
-            template_name='components/cart/cart_remove_product.html',
+            template_name='views/cart/cart.html',
             status=status.HTTP_200_OK
         )
 
-    @action(methods=['post'], detail=True, permission_classes=[IsAuthenticated], url_name='clear-cart')
+    @action(methods=['post'], detail=False, url_name='clear-cart')
     def clear_cart(self, request: Request, *args, **kwargs):
         cart: Cart = get_cart(request.user.id)
         cart.set_empty()
-        return redirect('cart-detail')        
+        return redirect('cart-detail')

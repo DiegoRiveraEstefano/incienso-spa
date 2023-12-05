@@ -110,5 +110,8 @@ def get_payment_status(order: Order):
     order.paid = True
     cart = Cart.objects.get(user=order.user)
     cart.set_empty()
+    for i in order.get_items():
+        i.product.stock -= i.quantity
+        i.product.save()
     order.save()
     return True, {'context': 'Pago Correctamente Realizado'}

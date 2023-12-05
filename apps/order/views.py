@@ -92,8 +92,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_order_detail_post_payment(self, request: Request, pk=None):
         order = get_object_or_404(Order, pk=pk)
         rs, context = get_payment_status(order)
+        if rs:
+            return Response(
+                {'status': status, 'context': context, 'order': order},
+                status=status.HTTP_200_OK,
+                template_name='views/order/order_post_payment.html'
+            )
+
         return Response(
             {'status': status, 'context': context, 'order': order},
             status=status.HTTP_200_OK,
-            template_name='views/order/order_post_payment.html'
+            template_name='views/order/order_error.html'
         )

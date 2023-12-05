@@ -1,6 +1,8 @@
 
 <div class="container">
     <h1>Product List</h1>
+    <div id="cart-modal" class="modal">
+    </div>
     <div class="row">
         <ul id="products" class="collection with-header">
             {% for i in products %}
@@ -11,3 +13,7 @@
         </ul>
     </div>
 </div>
+
+<script>
+M.AutoInit();
+</script>

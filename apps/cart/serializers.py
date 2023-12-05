@@ -10,6 +10,7 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class ProductCartSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ProductCart
         fields = ['product', 'quantity']

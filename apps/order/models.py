@@ -17,6 +17,7 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     payment_id = models.CharField(max_length=128, blank=True)
     total_cost = models.IntegerField(default=0)
+    accepted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-created"]
@@ -38,7 +39,7 @@ class Order(models.Model):
     def get_total_cost(self):
         total = sum(item.get_cost() for item in self.items.all())
         if self.discount_is_valid():
-            return int(total * 0.2)
+            return int(total * 0.8)
         return total
 
     def get_raw_total_cost(self):

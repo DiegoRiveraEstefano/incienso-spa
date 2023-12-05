@@ -6,11 +6,12 @@ from django.contrib.auth import logout
 from django.conf.urls import include
 
 from apps.user.exceptions import permission_denied_view
-from .views import Index
+from .views import Index, About
 
 
 urlpatterns = [
-    path('', Index.as_view()),
+    path('', Index.as_view(), name='home'),
+    path('about/', About.as_view(), name='about'),
     path('admin/', admin.site.urls, name='admin'),
     path('logout/', logout, {'next_page': '/'}, name='logout'),
     path('', include('apps.user.urls')),

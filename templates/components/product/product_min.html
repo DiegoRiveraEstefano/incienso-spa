@@ -17,7 +17,7 @@
     </div>
     <div class="card-action">
       <a hx-get="{% url 'product-detail' product.uuid %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app"><i class="material-icons">info_outlined</i></a>
-      <form method="POST" action="{% url 'cart-list' %}" hx-post="{% url 'cart-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">
+      <form method="POST" action="{% url 'cart-list' %}" hx-post="{% url 'cart-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#cart-modal">
         {% csrf_token %}
         <input id="product-uuid" type="hidden" name="product_uuid" value="{{ product.uuid }}">        
         <button type="submit"><i class="material-icons">add_shopping_cart</i></button>

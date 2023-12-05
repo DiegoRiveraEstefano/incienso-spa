@@ -3,7 +3,7 @@
 <h1 class="center-align">Registro de Usuario</h1>
 <div class="container">
   <div class="container">
-    <form method="POST" action="{% url 'user-register' %}" id="user-register-form" hx-post="{% url 'user-register' %}"
+    <form method="POST" action="{% url 'user-list' %}" id="user-register-form" hx-post="{% url 'user-list' %}"
         hx-swap="innerHTML"
         hx-target="#app">
         {% csrf_token %}

@@ -1,0 +1,13 @@
+{% extends "layout/_base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Hubo Un Error al Realizar la Compra</h1>
+    <h2>Error: {{ contex }}</h2>
+    <a class="btn waves-effect indigo lighten-2" hx-get="{% url 'cart-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">
+        Inicio
+    </a>
+</div>
+
+{% endblock content %}

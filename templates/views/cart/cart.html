@@ -14,12 +14,19 @@
         </thead>
         <tbody>
           {% for i in cart.get_products %}
-            <tr>
+            <tr id="product-{{ i.product.uuid }}">
               <td><a href="#">{{ i.product.name }}</a></td>
               <td>${{ i.get_cost }}</td>
               <td>${{ i.get_raw_cost }}</td>
               <td>{{ i.quantity }}</td>
-              <td><button class="waves-effect waves-light btn">Remover</button></td>
+              <td>
+                <button
+                  hx-get="{% url 'cart-remove-product' i.product.uuid %}"
+                  hx-swap="delete transition:true"
+                  hx-target="#product-{{ i.product.uuid }}"
+                  class="waves-effect waves-light btn">Remover
+                </button>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

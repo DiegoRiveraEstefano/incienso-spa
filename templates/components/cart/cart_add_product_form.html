@@ -1,0 +1,20 @@
+{% load rest_framework %}
+
+<div class="container">
+    <form method="POST" action="{% url 'cart-list' %}"
+        hx-post="{% url 'cart-list' %}"
+        hx-swap="innerHTML ignoreTitle:true"
+        hx-target="#cart-modal"
+        id="cart-add-product">
+
+        {% csrf_token %}
+        <input class="input-field" type="number" value="1" required name="quantity" id="quantity" pattern="[0-9]+" max="{{ product.stock }}">
+        <input type="hidden" name="product_uuid" value="{{ product.uuid }}">
+        <button
+            type="submit"
+            form="cart-add-product"
+            class="btn waves-effect indigo lighten-2"
+            >Añadir
+        </button>
+    </form>
+</div>

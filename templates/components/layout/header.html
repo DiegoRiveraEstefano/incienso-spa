@@ -10,7 +10,7 @@
             <a hx-get="{% url 'blog-list' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Blogs</a>
         </li>
         <li>
-            <a hx-get="/about/" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Nosotros</a>
+            <a hx-get="{% url 'about' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Nosotros</a>
         </li>
         <li>
             <a hx-get="{% url 'user-profile' %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app">Perfil</a>

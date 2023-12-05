@@ -1,32 +1,64 @@
 <div class="container">
-    <h1>User Profile</h1>
-    <p>Welcome, {{user.username}}!</p>
-    <hr>
-    <h2>Orders:</h2>
-    <ul class="collection with-header">
-        {% for order in user.get_orders %}
-            <li class="collection-item">
-                <a
-                hx-get="{% url 'order-detail' order.uuid %}"
-                hx-swap="innerHTML"
-                hx-target="#app">{{order.uuid}} - {{order.address}} @ ${{order.total_cost}}
-                </a>
-            </li>
-        {% endfor %}
+
+    <section id="profile">
+        <h1>Perfil de Usuario</h1>
+        <p>Bienvenido, {{user.username}}!</p>
+    </section>
+
+    <ul id="tabs-swipe-demo" class="tabs">
+        <li class="tab col s3"><a href="#blogs">Blogs</a></li>
+        <li class="tab col s3"><a href="#orders">Ordenes</a></li>
     </ul>
-    <hr>
-    <h2>Blogs:</h2>
-    <ul class="collection">
-        {% for blog in user.get_blogs %}
-        <li class="collection-item">
-            <p><a class="btn-floating btn-large waves-effect" hx-get="{% url 'blog-detail' blog.uuid %}" hx-swap="innerHTML" hx-target="#app">{{blog.title}}</a></p>
-        </li>
-        {% endfor %}
-    </ul>
-    <button
-        class="btn waves-effect indigo lighten-2"
-        hx-get="{% url 'blog-create-form' %}"
-        hx-swap="innerHTML"
-        hx-target="#app">Crear Blog
-    </button>
+
+    <section id="blogs">
+        <h2>Blogs:</h2>
+        <div class="row">
+            <table class="col s9 highlight striped centered responsive-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Activo</th>
+                    <th>Categoria</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for blog in user.get_blogs %}
+                    <tr>
+                        <td>{{ blog.title }}</td>
+                        <td>{{ blog.publish_data }}</td>
+                        <td>{{ blog.active }}</td>
+                        <td>{{ blog.category.category }}</td>
+                        <td><button hx-get="{% url 'blog-detail' blog.uuid %}" hx-swap="innerHTML ignoreTitle:true" hx-target="#app" class="waves-effect waves-light btn">Leer</button></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+            <br><br><br>
+            <aside class="col 3">
+                <button
+                    class="btn waves-effect indigo lighten-2"
+                    hx-get="{% url 'blog-create-form' %}"
+                    hx-swap="innerHTML"
+                    hx-target="#app">Crear Blog
+                </button>
+            </aside>
+        </div>
+    </section>
+
+    <section id="orders">
+        <h2>Orders:</h2>
+        <ul class="collection with-header">
+            {% for order in user.get_orders %}
+                <li class="collection-item">
+                    <a
+                    hx-get="{% url 'order-detail' order.uuid %}"
+                    hx-swap="innerHTML"
+                    hx-target="#app">{{order.uuid}} - {{order.address}} @ ${{order.total_cost}}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
 </div>
