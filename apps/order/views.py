@@ -6,9 +6,11 @@ from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django_filters import rest_framework as filters
 
 from apps.cart.models import Cart
 from apps.user.models import User
+from .filters import OrderFilter
 from .models import Order, OrderItem
 from .logics import create_order, make_pay_order, get_payment_status
 from .serializers import OrderSerializer, OrderItemSerializer, OrderWriteSerializer, OrderPaymentSerializer
@@ -19,6 +21,11 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Order.objects.all()
+        return Order.objects.filter(user=self.request.user)
 
     def retrieve(self, request, *args, **kwargs):
         order = get_object_or_404(Order, uuid=kwargs["pk"])
@@ -76,7 +83,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         order, link = make_pay_order(order, return_url, cancel_url)
         serializer = OrderPaymentSerializer(data={'link': link})
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         return Response(data=serializer.data)
 
     @action(methods=['GET'], detail=False, url_name='create-form')
@@ -104,3 +111,29 @@ class OrderViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK,
             template_name='views/order/order_error.html'
         )
+
+
+class OrderApiViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated,]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    renderer_classes = [JSONRenderer]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = OrderFilter
+
+    def get_queryset(self):
+        if not self.request:
+            return Order.objects.none()
+
+        if self.request.user.is_staff:
+            return Order.objects.all()
+        return Order.objects.filter(user=self.request.user)
+
+    def retrieve(self, *args, **kwargs):
+        instance: Order = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = {
+            'cart': serializer.data,
+            'products': OrderItemSerializer(data=instance.get_items(), many=True)
+        }
+        return Response(data=data, status=200)

@@ -2,13 +2,15 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from .models import Blog, BlogCategory
+from apps.user.serializers import UserSerializer
+from ..user.models import User
 
 
 class BlogReadSerializer(serializers.ModelSerializer):
 
-    imagen = serializers.SerializerMethodField(read_only=True)
+    image = serializers.ImageField(read_only=True)
 
-    def get_imagen(self, obj):
+    def get_image(self, obj):
         return obj.image.url if obj.image else settings.STATIC_URL + 'images/blog/default_image.png'
 
     class Meta:
@@ -20,6 +22,7 @@ class BlogReadSerializer(serializers.ModelSerializer):
 
 
 class BlogWriteSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Blog
         fields = [

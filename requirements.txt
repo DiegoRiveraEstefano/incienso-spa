@@ -43,5 +43,5 @@ Werkzeug==3.0.1
 djangorestframework==3.14.0
 django-htmx
 django_extensions
-
-
+django-filter~=23.5
+python-dotenv~=1.0.0

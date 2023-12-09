@@ -6,7 +6,7 @@ from .models import Cart, ProductCart
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
-        fields = ['user']
+        fields = ['user', 'uuid']
 
 
 class ProductCartSerializer(serializers.ModelSerializer):

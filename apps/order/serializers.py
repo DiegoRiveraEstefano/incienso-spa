@@ -49,7 +49,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['user', 'address', 'postal_code',
-                  'city', 'uuid', 'total_cost', 'discount_code', 'raw_total_cost']
+                  'city', 'uuid', 'total_cost', 'discount_code', 'raw_total_cost', 'created', 'updated']
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

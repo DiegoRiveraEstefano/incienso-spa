@@ -12,6 +12,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
         error_messages={
             "required": "Este Campo es Requerido.",
         },
+        required=True
     )
 
     email = serializers.CharField(
@@ -20,6 +21,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
         error_messages={
             "required": "Este Campo es Requerido.",
         },
+        required=True
     )
 
     first_name = serializers.CharField(
@@ -44,6 +46,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
         error_messages={
             "required": "Este Campo es Requerido.",
         },
+        required=True
     )
 
     class Meta:

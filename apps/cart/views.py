@@ -3,12 +3,13 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.mixins import RetrieveModelMixin, ListModelMixin, CreateModelMixin
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.parsers import FormParser
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.request import Request
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
+from django_filters import rest_framework as filters
 
+from .filters import CartFilter
 from .models import ProductCart, Cart, Product
 from .serializers import ProductCartSerializer, CartSerializer, ProductCartReadSerializer
 from .logics import add_product, remove_product, get_cart
@@ -65,3 +66,33 @@ class CartViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
         cart: Cart = get_cart(request.user.id)
         cart.set_empty()
         return redirect('cart-detail')
+
+
+class CartApiViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = CartSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    parser_classes = [JSONParser, ]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = CartFilter
+
+    def perform_destroy(self, instance: Cart):
+        instance.set_empty()
+        instance.save()
+
+    def get_queryset(self):
+        if not self.request:
+            return Cart.objects.none()
+
+        if self.request.user.is_staff:
+            return Cart.objects.all()
+        return Cart.objects.filter(user=self.request.user)
+
+    def retrieve(self, *args, **kwargs):
+        instance: Cart = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = {
+            'cart': serializer.data,
+            'products': ProductCartSerializer(data=instance.get_products(), many=True)
+        }
+        return Response(data=data, status=200)

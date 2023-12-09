@@ -24,6 +24,7 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.final_price
 
     class Meta:
+
         model = Product
         depth = 1
         fields = [
@@ -33,7 +34,23 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 
-class ProductDiscountSerialized(serializers.ModelSerializer):
+class ProductReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = [
+            'name', 'stock', 'active', 'price', 'price',
+            'description', 'thumbnail', 'image', 'category',
+        ]
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Product.objects.all(),
+                fields=['name', 'description']
+            ),
+        ]
+
+
+class ProductDiscountSerializer(serializers.ModelSerializer):
+    uuid = serializers.SerializerMethodField(read_only=True)
     product = ProductSerializer(read_only=True)
 
     class Meta:
@@ -45,7 +62,7 @@ class ProductDiscountSerialized(serializers.ModelSerializer):
         ]
 
 
-class ProductTagSerialized(serializers.ModelSerializer):
+class ProductTagSerializer(serializers.ModelSerializer):
 
     product = ProductSerializer(read_only=True)
 
