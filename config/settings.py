@@ -60,6 +60,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    #"django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 # DEBUG
@@ -70,8 +73,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
 CLIENT_SECRET = os.getenv('PAYPAL_CLIENT_SECRET')
-
-REDIRECT_PAGE = 'http://localhost:4321/order/%order%'
 
 # DOMAINS
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
@@ -95,11 +96,35 @@ MANAGERS = ADMINS
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {}
+DEV_DATABASE = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 
-DATABASES['default'] = {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
+PRODUCTION_DATABASE = {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env.str('POSTGRES_DB'),
+        'USER': env.str('POSTGRES_USER'),
+        'PASSWORD': env.str('POSTGRES_PASSWORD'),
+        'HOST': env.str('POSTGRES_HOST'),
+        'PORT': env.str('POSTGRES_PORT'),
+    }
+
+DATABASES = {}
+if not DEBUG:
+    DATABASES['default'] = DEV_DATABASE
+else:
+    DATABASES['default'] = PRODUCTION_DATABASE
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": env.str('REDIS_URL'),
+        "OPTIONS": {
+            "PASSWORD": env.str('REDIS_PASSWORD'),
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+        }
+    }
 }
 
 

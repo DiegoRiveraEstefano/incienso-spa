@@ -1,8 +1,9 @@
-from django_filters import rest_framework as filters
+from django_filters import rest_framework as rest_filters
+from django_filters import FilterSet
 from .models import Product, ProductTag, ProductDiscount
 
 
-class ProductFilter(filters.FilterSet):
+class ProductFilter(FilterSet):
 
     class Meta:
         model = Product
@@ -15,10 +16,23 @@ class ProductFilter(filters.FilterSet):
         }
 
 
-class ProductDiscountFilter(filters.FilterSet):
+class ProductRestFilter(rest_filters.FilterSet):
 
-    end_date = filters.DateRangeFilter()
-    start_date = filters.DateRangeFilter()
+    class Meta:
+        model = Product
+        fields = {
+            'name': ['exact', 'contains'],
+            'active': ['exact', 'contains'],
+            'category': ['exact', 'contains'],
+            'stock': ['lte', 'gte'],
+            'price': ['lte', 'gte'],
+        }
+
+
+class ProductDiscountFilter(rest_filters.FilterSet):
+
+    end_date = rest_filters.DateRangeFilter()
+    start_date = rest_filters.DateRangeFilter()
 
     class Meta:
         model = ProductDiscount

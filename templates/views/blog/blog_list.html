@@ -1,9 +1,53 @@
+<div class="">
+    <h1 class="center-align">Blogs</h1>
 
-<div class="container">
-    <h1>Blogs List</h1>
     <div class="row">
-        <ul id="blogs" class="collection with-header">
-            {% for i in blogs %}
+        <form
+            class="col s4 offset-s4"
+            id="blog-list-search-form"
+            hx-get="{% url 'blog-list' %}"
+            hx-swap="innerHTML transition:true"
+            hx-target="#app">
+            {{ filter.form.title }}
+        </form>
+        <button
+            form="blog-list-search-form"
+            type="submit"
+            class="col s1 btn waves-effect indigo lighten-2"
+            >Buscar
+        </button>
+    </div>
+
+    <div class="row">
+        <div id="filters" class="offset-s1 col s2">
+            <form
+                id="blog-list-form"
+                hx-get="{% url 'blog-list' %}"
+                hx-swap="innerHTML transition:true"
+                hx-target="#app">
+
+                <div class="input-field">
+                    <label>Categoria</label>
+                    {{ filter.form.category__category }}
+                </div>
+
+                <div class="divider"><br></div>
+                <div class="input-field">
+                    <label>Autor</label>
+                    {{ filter.form.user__username }}
+                </div>
+
+            </form>
+            <button
+                type="submit"
+                form="blog-list-form"
+                class="btn waves-effect indigo lighten-2"
+                >Buscar
+            </button>
+        </div>
+        <br><br>
+        <ul id="products" class="collection with-header col s7 offset-s1">
+            {% for i in filter.qs %}
             <li>
                 {% include "components/blog/blog_min.html" with blog=i%}
             </li>

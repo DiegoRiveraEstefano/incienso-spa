@@ -1,0 +1,5 @@
+{% for i in products %}
+<li>
+    {% include "components/product/product_min.html" with product=i%}
+</li>
+{% endfor %}

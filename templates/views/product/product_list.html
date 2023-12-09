@@ -1,11 +1,78 @@
 
-<div class="container">
-    <h1>Product List</h1>
+<div class="">
+    <h1 class="center-align">Product List</h1>
     <div id="cart-modal" class="modal">
     </div>
+
     <div class="row">
-        <ul id="products" class="collection with-header">
-            {% for i in products %}
+        <form
+            class="col s4 offset-s4"
+            id="product-list-search-form"
+            hx-get="{% url 'product-list' %}"
+            hx-swap="innerHTML transition:true"
+            hx-target="#app">
+            {{ filter.form.name }}
+        </form>
+        <button
+            form="product-list-search-form"
+            type="submit"
+            class="col s1 btn waves-effect indigo lighten-2"
+            >Buscar
+        </button>
+    </div>
+
+    <div class="row">
+        <div id="filters" class="offset-s1 col s2">
+            <form
+                id="product-list-form"
+                hx-get="{% url 'product-list' %}"
+                hx-swap="innerHTML transition:true"
+                hx-target="#app">
+
+                <br>
+                <h5 class="center-align" >Categoria</h5>
+                {{ filter.form.category }}
+
+                <div class="divider"></div>
+                <br>
+                <h5 class="center-align" >Stock</h5>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label>Menor Que</label>
+                        {{ filter.form.stock__lte }}
+                    </div>
+                    <div class="input-field col s6">
+                        <label>Mayor Que</label>
+                        {{ filter.form.stock__gte }}
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                <br>
+                <h5 class="center-align" >Precio</h5>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <label>Menor Que</label>
+                        {{ filter.form.price__lte }}
+                    </div>
+                    <div class="input-field col s6">
+                        <label>Mayor Que</label>
+                        {{ filter.form.price__gte }}
+                    </div>
+                </div>
+
+            </form>
+            <button
+                type="submit"
+                form="product-list-form"
+                class="btn waves-effect indigo lighten-2"
+                >Buscar
+            </button>
+        </div>
+        <br><br>
+        <ul id="products" class="collection with-header col s7 offset-s1">
+            {% for i in filter.qs %}
             <li>
                 {% include "components/product/product_min.html" with product=i%}
             </li>

@@ -65,6 +65,8 @@ class UserViewSet(viewsets.ModelViewSet):
             login(request, user)
             return redirect('user-profile')
 
+        return redirect('user-login-form')
+
     @action(methods=['GET'], detail=False, permission_classes=[IsAuthenticated, ])
     def profile(self, request):
         return Response(

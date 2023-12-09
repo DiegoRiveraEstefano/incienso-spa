@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django_filters import rest_framework as filters
 
-from .filters import BlogFilter
+from .filters import BlogFilter, BlogRestFilter
 from .models import Blog, BlogCategory
 from .serializers import BlogReadSerializer, BlogWriteSerializer, BlogFormSerializer
 from ..user.models import User
@@ -22,6 +22,8 @@ class BlogViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
     permission_classes = [IsAuthenticated, ]
     renderer_classes = [TemplateHTMLRenderer]
     parser_classes = (MultiPartParser, FormParser)
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = BlogFilter
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -29,8 +31,8 @@ class BlogViewSet(viewsets.GenericViewSet, RetrieveModelMixin, ListModelMixin, C
         return Blog.objects.filter(active=True)
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        return Response({'blogs': queryset},
+        filter_set = self.filterset_class(request.query_params, queryset=self.get_queryset())
+        return Response({'filter': filter_set},
                         template_name='views/blog/blog_list.html', status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
@@ -68,7 +70,7 @@ class BlogApiViewSet(viewsets.ModelViewSet):
     renderer_classes = [JSONRenderer, ]
     parser_classes = (MultiPartParser, JSONParser)
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = BlogFilter
+    filterset_class = BlogRestFilter
     pagination_class = PageNumberPagination
     page_size = 10
 
