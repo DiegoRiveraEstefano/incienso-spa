@@ -47,9 +47,16 @@ class BlogFormSerializer(serializers.ModelSerializer):
             "required": "Este Campo es Requerido.",
         },
     )
-
+    
+    categories = []
+    try:
+        categories= list(map(lambda x: [str(x['uuid']), x['category']], BlogCategory.objects.defer('uuid', 'category')))
+    except Exception as e:
+        categories = []
+        
+        
     category = serializers.ChoiceField(
-        choices=list(map(lambda x: [str(x['uuid']), x['category']], BlogCategory.objects.values('uuid', 'category'))),
+        choices=categories,
         style={'template': 'components/forms/select.html'},
         error_messages={
             "required": "Este Campo es Requerido.",

@@ -111,7 +111,7 @@ PRODUCTION_DATABASE = {
     }
 
 DATABASES = {}
-if not DEBUG:
+if DEBUG:
     DATABASES['default'] = DEV_DATABASE
 else:
     DATABASES['default'] = PRODUCTION_DATABASE
